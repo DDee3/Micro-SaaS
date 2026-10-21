@@ -16,28 +16,19 @@ export function Pricing() {
   const supabase = createClient();
 
   const handleSelectPlan = async (plan: Plan) => {
-    // If free plan, redirect to sign up
-    if (plan.id === "free") {
-      router.push("/signup");
-      return;
-    }
-
     const priceId = isYearly ? plan.yearlyPriceId : plan.monthlyPriceId;
     setLoadingPriceId(priceId);
 
     try {
-      // Check if user is authenticated
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
       if (!user) {
-        // Redirect to login/signup with return parameter
         router.push(`/login?redirectTo=/dashboard&priceId=${priceId}`);
         return;
       }
 
-      // Initiate Stripe checkout session
       const response = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,10 +59,10 @@ export function Pricing() {
             Simple & Transparent Pricing
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">
-            Invest once, profit forever
+            Predictable plans that scale with you
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted-foreground">
-            Choose the right plan for your business. Upgrade, downgrade, or cancel anytime.
+            Start small at $9/mo, upgrade as you grow, and cancel anytime directly through the Stripe billing portal.
           </p>
 
           {/* Monthly / Yearly Toggle */}
@@ -139,7 +130,7 @@ export function Pricing() {
                       ${price}
                     </span>
                     <span className="text-sm font-medium text-muted-foreground">
-                      {plan.id === "free" ? "" : isYearly ? "/year" : "/month"}
+                      {isYearly ? "/year" : "/month"}
                     </span>
                   </div>
 
@@ -178,4 +169,3 @@ export function Pricing() {
     </section>
   );
 }
-
