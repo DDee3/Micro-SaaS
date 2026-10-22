@@ -1,66 +1,80 @@
+"use client";
+
+import { TiltCard } from "./tilt-card";
+
 const faqs = [
   {
-    question: "How do I connect my Stripe and Supabase accounts?",
+    index: "01",
+    question: "How are Stripe Webhooks verified and protected?",
     answer:
-      "Duplicate `.env.example` to `.env.local` and add your Supabase Project URL, Anon Key, Service Role Key, and Stripe Secret keys. Run `supabase/schema.sql` in your Supabase SQL editor to create the profiles table and auth triggers.",
+      "Every incoming POST to `/api/stripe/webhook` is cryptographically validated using `stripe.webhooks.constructEvent()` with `STRIPE_WEBHOOK_SECRET`. This prevents spoofing attacks and ensures only legitimate Stripe billing events trigger state changes in your Supabase database.",
   },
   {
-    question: "How does the Stripe Customer Portal work?",
+    index: "02",
+    question: "How does the Stripe Customer Portal operate?",
     answer:
-      "When users click 'Manage Billing', an API request calls `/api/stripe/portal`, generating a secure single-use Stripe billing session. Customers can change their credit card, view past invoices, upgrade, or cancel their subscription directly.",
+      "When a user triggers the billing button, `/api/stripe/portal` generates an authenticated single-use Stripe billing session. Customers directly upgrade, downgrade, change payment cards, or cancel subscriptions without requiring custom developer intervention.",
   },
   {
-    question: "Can I use this starter kit to sell multiple SaaS apps?",
+    index: "03",
+    question: "What guarantees exist against cross-tenant data leaks?",
     answer:
-      "Yes. You receive a perpetual commercial license to create, deploy, and sell unlimited micro-SaaS applications or client projects with zero royalties.",
+      "PostgreSQL Row Level Security (RLS) is strictly enforced on `public.profiles`. Auth sessions verified by `@supabase/ssr` inject `auth.uid()`, preventing any user from accessing, modifying, or querying another customer's subscription or metadata.",
   },
   {
-    question: "How does the middleware protect dashboard routes?",
+    index: "04",
+    question: "How does Edge Middleware prevent unauthenticated flash?",
     answer:
-      "The Next.js Edge Middleware (`middleware.ts`) refreshes the Supabase user session on every request and intercepts unauthorized traffic heading to `/dashboard`, redirecting visitors to `/login` before any page components render.",
+      "The Next.js Edge Middleware (`middleware.ts`) refreshes the Supabase token on every incoming request. If an unauthorized client attempts to access `/dashboard`, they are redirected to `/login` before any Server Component or client bundle begins execution.",
   },
   {
-    question: "Are database migrations included?",
+    index: "05",
+    question: "Is this starter commercial license royalty-free?",
     answer:
-      "Yes. The `supabase/schema.sql` file contains the exact PostgreSQL schema, indexes, automated signup triggers (`handle_new_user`), and strict Row Level Security (RLS) policies.",
+      "Yes. You receive a perpetual, commercial license to build, launch, and monetize unlimited client projects or independent Micro-SaaS products with zero royalties or revenue shares.",
   },
   {
-    question: "How do I test webhooks on localhost?",
+    index: "06",
+    question: "How do I test webhook events during local development?",
     answer:
-      "Use the Stripe CLI with `npm run stripe:listen` to forward webhook events directly to `http://localhost:3000/api/stripe/webhook` and test checkout and subscription cancellations in real-time.",
+      "Run `npm run stripe:listen` with the official Stripe CLI. All live webhook triggers (checkout completions, subscription updates, cancellations) are forwarded instantly to `localhost:3000/api/stripe/webhook` with signature logging.",
   },
 ];
 
 export function FAQ() {
   return (
-    <section id="faq" className="py-28 md:py-36 relative border-t border-white/[0.08] bg-[#09090b]">
-      <div className="container max-w-5xl mx-auto px-6">
-        <div className="max-w-2xl mb-16 text-left">
-          <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
-            Common Inquiries
+    <section id="architecture" className="py-32 relative bg-[#000000] border-t border-white/[0.08]">
+      <div className="container max-w-6xl mx-auto px-6">
+        <div className="max-w-3xl mb-16 text-left">
+          <div className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF5A00] mb-3 flex items-center gap-2">
+            <span>// DEEP ARCHITECTURE</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.035em] text-zinc-100 leading-tight">
-            Frequently asked questions
+          <h2 className="text-4xl sm:text-6xl font-black tracking-[-0.04em] uppercase text-white leading-tight">
+            FREQUENTLY QUERIED <br />
+            SYSTEM SPECIFICATIONS.
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
-            Everything you need to know about the starter kit stack, architecture, and deployment.
+          <p className="mt-4 text-base sm:text-lg text-zinc-400 font-normal leading-relaxed">
+            Technical clarity on security boundaries, webhook lifecycles, and deployment guarantees.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {faqs.map((faq, index) => (
-            <div
+            <TiltCard
               key={index}
-              className="group p-6 rounded-xl border border-white/[0.08] bg-zinc-950/40 hover:border-white/20 hover:bg-zinc-900/30 transition-all duration-200"
+              intensity={6}
+              className="group p-8 border border-white/10 bg-zinc-950/70 hover:border-[#FF5A00]/40 transition-colors duration-300"
             >
-              <h3 className="text-base font-medium text-zinc-100 tracking-tight group-hover:text-white transition-colors">
+              <div className="font-mono text-xs text-[#FF5A00] mb-4 flex items-center gap-2">
+                <span>// SPEC_{faq.index}</span>
+              </div>
+              <h3 className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-white transition-colors">
                 {faq.question}
               </h3>
               <p className="mt-3 text-xs sm:text-sm text-zinc-400 leading-relaxed font-normal">
                 {faq.answer}
               </p>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>

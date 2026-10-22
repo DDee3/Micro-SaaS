@@ -2,12 +2,14 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { ManageSubscriptionButton } from "@/components/dashboard/manage-subscription-button";
+import { TiltCard } from "@/components/landing/tilt-card";
 import {
   Activity,
   CreditCard,
   Database,
   CheckCircle2,
   ShieldCheck,
+  Terminal,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -43,27 +45,28 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const subscriptionStatus = profile?.subscription_status || "free";
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-10 pb-16">
+      {/* Checkout Verification Banner */}
       {searchParams.success && (
-        <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-emerald-400">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          <div className="text-xs sm:text-sm font-medium">
-            Payment verified. Your subscription is active and premium account limits have been unlocked.
+        <div className="flex items-center gap-3 border-2 border-[#FF5A00] bg-[#FF5A00]/15 p-5 text-white font-mono text-xs sm:text-sm">
+          <CheckCircle2 className="h-5 w-5 text-[#FF5A00] shrink-0" />
+          <div className="tracking-wide">
+            <span className="font-black text-[#FF5A00]">[TRANSACTION VERIFIED]</span> Stripe checkout session confirmed. Production account limits unlocked.
           </div>
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-white/[0.06]">
+      {/* Header Console HUD */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-8 border-b border-white/[0.08]">
         <div>
-          <div className="font-mono text-[11px] uppercase tracking-wider text-zinc-500 mb-1 flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Console / Overview
+          <div className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF5A00] mb-2 flex items-center gap-2">
+            <span>// TELEMETRY & BILLING CONSOLE</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-[-0.035em] text-zinc-100">
-            Welcome back, {profile?.full_name || user.email?.split("@")[0]}
+          <h1 className="text-3xl sm:text-5xl font-black tracking-[-0.04em] uppercase text-white leading-tight">
+            OPERATOR: {profile?.full_name || user.email?.split("@")[0]}
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 mt-1 font-normal">
-            Monitor API usage, manage database quotas, and configure Stripe billing.
+          <p className="text-xs sm:text-sm text-zinc-400 mt-2 font-mono">
+            Autonomous API execution, Postgres RLS boundaries, and Stripe subscription lifecycle.
           </p>
         </div>
 
@@ -74,144 +77,180 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="group rounded-xl border border-white/[0.06] bg-zinc-950 p-6 hover:border-white/20 transition-all duration-200 hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">
-              Subscription Plan
-            </span>
-            <div className="h-7 w-7 rounded-lg border border-white/10 bg-zinc-900/80 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:border-white/20 transition-colors">
-              <CreditCard className="h-3.5 w-3.5" />
+      {/* Bento Stat Cards with 3D Tilt */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Stat Card 1: Subscription Tier */}
+        <TiltCard
+          intensity={8}
+          className="group border border-white/10 bg-zinc-950/80 p-7 hover:border-[#FF5A00] transition-colors duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
+                STAT_01 // PLAN STATUS
+              </span>
+              <div className="h-8 w-8 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00] group-hover:border-[#FF5A00] transition-colors">
+                <CreditCard className="h-4 w-4" />
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+                CURRENT TIER
+              </div>
+              <div className="text-4xl sm:text-5xl font-mono font-black text-white tracking-tight uppercase">
+                {isSubscribed ? "PRO" : "FREE"}
+              </div>
             </div>
           </div>
 
-          <div className="mt-4 flex items-center justify-between">
-            <span className="font-mono text-2xl font-semibold text-zinc-100 tracking-tight capitalize">
-              {isSubscribed ? "Active" : "Free Tier"}
+          <div className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between font-mono text-xs">
+            <span className="text-zinc-500 text-[11px]">
+              {profile?.subscription_period_end
+                ? `RENEWS: ${new Date(profile.subscription_period_end).toLocaleDateString()}`
+                : "UPGRADE VIA STRIPE"}
             </span>
             <span
-              className={`font-mono text-[11px] px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 border ${
+              className={`px-3.5 py-1 border-2 text-xs font-mono font-black uppercase tracking-wider ${
                 isSubscribed
-                  ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                  ? "border-[#FF5A00] bg-[#FF5A00]/15 text-[#FF5A00]"
                   : subscriptionStatus === "canceled"
-                  ? "text-rose-400 bg-rose-500/10 border-rose-500/20"
-                  : "text-zinc-400 bg-zinc-800/50 border-white/10"
+                  ? "border-rose-500/60 bg-rose-500/15 text-rose-400"
+                  : "border-white/30 bg-white/10 text-white"
               }`}
             >
-              {isSubscribed && (
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-              )}
-              {subscriptionStatus}
+              {isSubscribed ? "ACTIVE" : subscriptionStatus}
             </span>
           </div>
+        </TiltCard>
 
-          <p className="mt-4 text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.04]">
-            {profile?.subscription_period_end
-              ? `Renews: ${new Date(profile.subscription_period_end).toLocaleDateString()}`
-              : "Upgrade via Stripe to unlock production scale."}
-          </p>
-        </div>
+        {/* Stat Card 2: Usage Quota */}
+        <TiltCard
+          intensity={8}
+          className="group border border-white/10 bg-zinc-950/80 p-7 hover:border-[#FF5A00] transition-colors duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
+                STAT_02 // USAGE QUOTA
+              </span>
+              <div className="h-8 w-8 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00] group-hover:border-[#FF5A00] transition-colors">
+                <Activity className="h-4 w-4" />
+              </div>
+            </div>
 
-        <div className="group rounded-xl border border-white/[0.06] bg-zinc-950 p-6 hover:border-white/20 transition-all duration-200 hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">
-              Usage Quota
-            </span>
-            <div className="h-7 w-7 rounded-lg border border-white/10 bg-zinc-900/80 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:border-white/20 transition-colors">
-              <Activity className="h-3.5 w-3.5" />
+            <div className="mt-6">
+              <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+                MONTHLY REQS
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl sm:text-5xl font-mono font-black text-white tracking-tight">
+                  {isSubscribed ? "12,480" : "420"}
+                </span>
+                <span className="font-mono text-xs text-zinc-500 uppercase">
+                  / {isSubscribed ? "50,000" : "1,000"}
+                </span>
+              </div>
+            </div>
+
+            <div className="w-full bg-black h-2 mt-4 border border-white/10 overflow-hidden">
+              <div
+                className="bg-[#FF5A00] h-full transition-all duration-500 shadow-[0_0_12px_rgba(255,90,0,0.5)]"
+                style={{ width: isSubscribed ? "25%" : "42%" }}
+              />
             </div>
           </div>
 
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="font-mono text-2xl font-semibold text-zinc-100 tracking-tight">
-              {isSubscribed ? "12,480" : "420"}
-            </span>
-            <span className="font-mono text-xs text-zinc-500">
-              / {isSubscribed ? "50,000" : "1,000"} reqs
-            </span>
+          <div className="mt-8 pt-4 border-t border-white/[0.06] font-mono text-[11px] text-zinc-500 flex items-center justify-between">
+            <span>INTERVAL: MONTHLY</span>
+            <span className="text-white font-bold">RESETS 1ST</span>
           </div>
+        </TiltCard>
 
-          <div className="w-full bg-zinc-900 rounded-full h-1 mt-3 border border-white/[0.03]">
-            <div
-              className="bg-zinc-200 h-1 rounded-full transition-all duration-500"
-              style={{ width: isSubscribed ? "25%" : "42%" }}
-            />
-          </div>
+        {/* Stat Card 3: Postgres RLS Security */}
+        <TiltCard
+          intensity={8}
+          className="group border border-white/10 bg-zinc-950/80 p-7 hover:border-[#FF5A00] transition-colors duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-500">
+                STAT_03 // RLS SECURITY
+              </span>
+              <div className="h-8 w-8 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00] group-hover:border-[#FF5A00] transition-colors">
+                <Database className="h-4 w-4" />
+              </div>
+            </div>
 
-          <p className="mt-3 text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.04]">
-            Resets automatically on 1st of every month
-          </p>
-        </div>
-
-        <div className="group rounded-xl border border-white/[0.06] bg-zinc-950 p-6 hover:border-white/20 transition-all duration-200 hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">
-              RLS Security
-            </span>
-            <div className="h-7 w-7 rounded-lg border border-white/10 bg-zinc-900/80 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:border-white/20 transition-colors">
-              <Database className="h-3.5 w-3.5" />
+            <div className="mt-6">
+              <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">
+                POSTGRES ROW ISOLATION
+              </div>
+              <div className="text-4xl sm:text-5xl font-mono font-black text-white tracking-tight">
+                SECURED
+              </div>
             </div>
           </div>
 
-          <div className="mt-4 flex items-center justify-between">
-            <span className="font-mono text-2xl font-semibold text-zinc-100 tracking-tight">
-              Row Security
-            </span>
-            <span className="font-mono text-[11px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-3 w-3" />
-              Protected
+          <div className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between font-mono text-xs">
+            <span className="text-zinc-500 text-[11px]">CASCADE DELETE TRIGGER</span>
+            <span className="px-3.5 py-1 border-2 border-white/30 bg-white/10 text-white text-xs font-mono font-black uppercase tracking-wider inline-flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[#FF5A00]" />
+              ENFORCED
             </span>
           </div>
-
-          <p className="mt-4 text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.04]">
-            Row Level Security active on public.profiles
-          </p>
-        </div>
+        </TiltCard>
       </div>
 
-      <div className="rounded-xl border border-white/[0.06] bg-zinc-950 overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
-          <div>
-            <h2 className="text-sm font-medium text-zinc-100 tracking-tight">
-              Account & Billing Credentials
-            </h2>
-            <p className="text-xs text-zinc-400 mt-0.5">
-              Synchronized records between Supabase Auth and Stripe Customer APIs
-            </p>
+      {/* Cybernetic Credentials Table */}
+      <div className="border border-white/10 bg-zinc-950/80 overflow-hidden font-mono">
+        <div className="px-6 py-4 border-b border-white/[0.08] flex items-center justify-between bg-black/60">
+          <div className="flex items-center gap-3">
+            <div className="h-7 w-7 bg-zinc-900 border border-white/15 flex items-center justify-center text-[#FF5A00]">
+              <Terminal className="h-4 w-4" />
+            </div>
+            <div>
+              <h2 className="text-xs font-bold text-white uppercase tracking-widest">
+                Account & Billing Infrastructure
+              </h2>
+              <p className="text-[11px] text-zinc-500">
+                Synchronized records between Supabase Auth and Stripe Customer APIs
+              </p>
+            </div>
           </div>
-          <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-white/[0.08] bg-white/[0.02] text-zinc-400">
-            Live Sync
+          <span className="font-mono text-xs uppercase tracking-widest px-3.5 py-1.5 border-2 border-[#FF5A00] bg-[#FF5A00]/15 text-[#FF5A00] font-black">
+            LIVE SYNC
           </span>
         </div>
 
-        <div className="divide-y divide-white/[0.04]">
-          <div className="px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.015] transition-colors">
-            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">User ID</span>
-            <span className="text-xs font-mono text-zinc-300 select-all">{user.id}</span>
+        <div className="divide-y divide-white/[0.06] text-xs">
+          <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.02] transition-colors">
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">User ID</span>
+            <span className="text-xs font-mono text-zinc-200 select-all hover:text-[#FF5A00] transition-colors">{user.id}</span>
           </div>
 
-          <div className="px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.015] transition-colors">
-            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">Email Address</span>
-            <span className="text-xs font-mono text-zinc-300 select-all">{user.email}</span>
+          <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.02] transition-colors">
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Email Address</span>
+            <span className="text-xs font-mono text-zinc-200 select-all hover:text-[#FF5A00] transition-colors">{user.email}</span>
           </div>
 
-          <div className="px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.015] transition-colors">
-            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">Stripe Customer ID</span>
-            <span className="text-xs font-mono text-zinc-300 select-all">
+          <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.02] transition-colors">
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Stripe Customer ID</span>
+            <span className="text-xs font-mono text-zinc-200 select-all hover:text-[#FF5A00] transition-colors">
               {profile?.stripe_customer_id || "Unassigned (Created on first checkout)"}
             </span>
           </div>
 
-          <div className="px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.015] transition-colors">
-            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">Stripe Subscription ID</span>
-            <span className="text-xs font-mono text-zinc-300 select-all">
+          <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.02] transition-colors">
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Stripe Subscription ID</span>
+            <span className="text-xs font-mono text-zinc-200 select-all hover:text-[#FF5A00] transition-colors">
               {profile?.stripe_subscription_id || "None"}
             </span>
           </div>
 
-          <div className="px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.015] transition-colors">
-            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-wider">Active Price ID</span>
-            <span className="text-xs font-mono text-zinc-300 select-all">
+          <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-1 hover:bg-white/[0.02] transition-colors">
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Active Price ID</span>
+            <span className="text-xs font-mono text-zinc-200 select-all hover:text-[#FF5A00] transition-colors">
               {profile?.stripe_price_id || "None"}
             </span>
           </div>

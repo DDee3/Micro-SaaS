@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, LayoutDashboard, Terminal } from "lucide-react";
+import { ArrowUpRight, Terminal, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { motion } from "framer-motion";
 
 export function Navbar() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -28,71 +29,82 @@ export function Navbar() {
   }, [supabase]);
 
   return (
-    <header className="fixed top-4 inset-x-0 mx-auto max-w-5xl w-[calc(100%-2rem)] z-50 rounded-full border border-white/[0.08] bg-[#09090b]/80 backdrop-blur-xl px-5 py-2.5 shadow-[0_16px_36px_rgba(0,0,0,0.6)] transition-all duration-300">
-      <div className="flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="h-7 w-7 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-zinc-300 group-hover:border-white/25 transition-colors">
-            <Terminal className="h-3.5 w-3.5" />
+    <motion.header
+      initial={{ y: -30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 inset-x-0 z-50 bg-[#000000]/80 backdrop-blur-xl border-b border-white/[0.08]"
+    >
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="h-8 w-8 bg-zinc-950 border border-white/15 flex items-center justify-center text-white group-hover:border-[#FF5A00] group-hover:text-[#FF5A00] transition-colors">
+            <Terminal className="h-4 w-4" />
           </div>
-          <span className="font-medium text-xs sm:text-sm text-zinc-100 tracking-tight">
-            LaunchKit
-          </span>
-          <span className="font-mono text-[10px] text-zinc-500 border border-white/[0.06] bg-white/[0.02] px-1.5 py-0.2 rounded-full">
-            v1.0
-          </span>
+          <div className="flex items-baseline gap-2">
+            <span className="font-extrabold text-sm sm:text-base text-white tracking-[-0.04em] uppercase">
+              LaunchKit
+            </span>
+            <span className="font-mono text-[10px] text-[#FF5A00] tracking-widest font-semibold uppercase">
+              // SPATIAL.01
+            </span>
+          </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-zinc-400">
-          <Link href="#features" className="hover:text-zinc-100 transition-colors">
-            Features
+        <nav className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-zinc-400">
+          <Link
+            href="#features"
+            className="hover:text-white hover:text-[#FF5A00] transition-colors"
+          >
+            [ Features ]
           </Link>
-          <Link href="#pricing" className="hover:text-zinc-100 transition-colors">
-            Pricing
+          <Link
+            href="#pricing"
+            className="hover:text-white hover:text-[#FF5A00] transition-colors"
+          >
+            [ Pricing ]
           </Link>
-          <Link href="#faq" className="hover:text-zinc-100 transition-colors">
-            FAQ
-          </Link>
-          <Link href="/dashboard" className="hover:text-zinc-100 transition-colors">
-            Dashboard
+          <Link
+            href="#architecture"
+            className="hover:text-white hover:text-[#FF5A00] transition-colors"
+          >
+            [ Architecture ]
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-4">
           {user ? (
             <Button
               asChild
               size="sm"
-              className="bg-white text-zinc-950 hover:bg-zinc-200 font-medium text-xs h-7 px-3.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all active:scale-[0.98]"
+              className="h-9 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-white text-black hover:bg-[#FF5A00] hover:text-black transition-all rounded-none"
             >
-              <Link href="/dashboard" className="gap-1.5">
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                Console
+              <Link href="/dashboard" className="gap-2">
+                <User className="h-3.5 w-3.5" />
+                <span>Console</span>
               </Link>
             </Button>
           ) : (
             <>
-              <Button
-                asChild
-                variant="ghost"
-                size="sm"
-                className="text-xs text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] h-7 px-3 rounded-full"
+              <Link
+                href="/login"
+                className="text-xs font-mono uppercase tracking-widest text-zinc-400 hover:text-white transition-colors px-2 py-1"
               >
-                <Link href="/login">Sign in</Link>
-              </Button>
+                Sign In
+              </Link>
               <Button
                 asChild
                 size="sm"
-                className="bg-white text-zinc-950 hover:bg-zinc-200 font-medium text-xs h-7 px-3.5 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.12)] transition-all active:scale-[0.98] group"
+                className="h-9 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-[#FF5A00] text-black hover:bg-white hover:text-black transition-all rounded-none shadow-[0_0_20px_rgba(255,90,0,0.35)] group"
               >
-                <Link href="#pricing" className="gap-1">
-                  <span>Get Started</span>
-                  <ArrowRight className="h-3 w-3 text-zinc-500 group-hover:translate-x-0.5 group-hover:text-zinc-950 transition-transform" />
+                <Link href="/signup" className="gap-1.5">
+                  <span>Deploy</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Link>
               </Button>
             </>
           )}
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

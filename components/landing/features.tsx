@@ -1,128 +1,190 @@
-import {
-  Lock,
-  CreditCard,
-  Database,
-  Layers,
-  ShieldCheck,
-  Code2,
-} from "lucide-react";
+"use client";
 
-const features = [
-  {
-    tag: "AUTH_SSR",
-    title: "Supabase Authentication",
-    description:
-      "Fully typed authentication flow using `@supabase/ssr`. Complete with Email/Password, Google OAuth, session token refreshing, and password reset routes.",
-    icon: Lock,
-    code: `const supabase = await createClient();
-const { data: { user } } = await supabase.auth.getUser();`,
-  },
-  {
-    tag: "BILLING_ENGINE",
-    title: "Stripe Recurring Billing",
-    description:
-      "Stripe Checkout sessions with price ID mapping, customer creation, and signature-verified webhook handlers for subscriptions, cancellations, and invoices.",
-    icon: CreditCard,
-    code: `switch (event.type) {
-  case "checkout.session.completed":
-  case "customer.subscription.updated":
-}`,
-  },
-  {
-    tag: "POSTGRES_RLS",
-    title: "Database & Profiles Schema",
-    description:
-      "Complete SQL schema for user profiles linked to auth.users. Includes automated database triggers, updated_at handlers, and strict Row Level Security.",
-    icon: Database,
-    code: `create policy "Users can view own profile"
-  on public.profiles for select
-  using (auth.uid() = id);`,
-  },
-  {
-    tag: "EDGE_GUARD",
-    title: "Protected Route Middleware",
-    description:
-      "Edge middleware that validates user tokens, refreshes cookies on every request, and intercepts unauthenticated access before pages are rendered.",
-    icon: ShieldCheck,
-    code: `if (pathname.startsWith('/dashboard') && !user) {
-  return NextResponse.redirect('/login');
-}`,
-  },
-  {
-    tag: "DESIGN_SYSTEM",
-    title: "Shadcn UI & Tailwind",
-    description:
-      "Zero lock-in UI components built on Radix UI primitives. Pre-configured dark theme, accessible dialogs, switches, badges, and clean typography.",
-    icon: Layers,
-    code: `import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";`,
-  },
-  {
-    tag: "TYPE_SAFETY",
-    title: "100% Strict TypeScript",
-    description:
-      "End-to-end type safety from server actions and route handlers to client forms and Supabase database models. Zero compilation warnings.",
-    icon: Code2,
-    code: `export interface Plan {
-  id: string;
-  monthlyPrice: number;
-  monthlyPriceId: string;
-}`,
-  },
-];
+import { motion } from "framer-motion";
+import { TiltCard } from "./tilt-card";
+import {
+  ShieldAlert,
+  Webhook,
+  Database,
+  Lock,
+  Layers,
+  Sparkles,
+  ArrowRight,
+  Terminal,
+} from "lucide-react";
 
 export function Features() {
   return (
-    <section id="features" className="py-28 md:py-36 relative border-t border-white/[0.08] bg-[#09090b]">
+    <section id="features" className="py-32 relative bg-[#000000] border-t border-white/[0.08]">
       <div className="container max-w-6xl mx-auto px-6">
-        <div className="max-w-2xl mb-20 text-left">
-          <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
-            Architectural Foundation
+        {/* Section Header */}
+        <div className="max-w-3xl mb-20 text-left">
+          <div className="font-mono text-xs uppercase tracking-[0.25em] text-[#FF5A00] mb-3 flex items-center gap-2">
+            <span>// ARCHITECTURAL MATRIX</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.035em] text-zinc-100 leading-tight">
-            Engineered for reliability, velocity, and clean DX
+          <h2 className="text-4xl sm:text-6xl font-black tracking-[-0.04em] uppercase text-white leading-tight">
+            NO SLOP. ZERO COMPROMISE. <br />
+            PURE INFRASTRUCTURE.
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
-            No bloated third-party abstractions. Built strictly on Next.js 14 App Router,
-            official Supabase SSR utilities, and Stripe standards.
+          <p className="mt-4 text-base sm:text-lg text-zinc-400 font-normal leading-relaxed">
+            Every file in this starter is structured for high-load commercial viability.
+            Asymmetrical architecture engineered for builders who despise bloated abstractions.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((feature, idx) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={idx}
-                className="group relative flex flex-col justify-between rounded-xl border border-white/[0.08] bg-zinc-950/40 p-6 hover:border-white/20 hover:bg-zinc-900/30 transition-all duration-200 hover:-translate-y-0.5"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="h-8 w-8 rounded-lg border border-white/10 bg-zinc-900/80 flex items-center justify-center text-zinc-300 group-hover:border-white/25 group-hover:text-white transition-colors duration-200">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <span className="font-mono text-[10px] tracking-wider text-zinc-500 uppercase px-2 py-0.5 rounded border border-white/[0.06] bg-white/[0.02]">
-                      {feature.tag}
-                    </span>
-                  </div>
+        {/* Bento Box Grid (Asymmetrical Mixed-Size Layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          {/* Card 1: Large Bento Tile (Cols 8) */}
+          <TiltCard
+            intensity={10}
+            className="md:col-span-8 group border border-white/10 bg-zinc-950/70 p-8 hover:border-[#FF5A00]/50 transition-colors duration-500 overflow-hidden relative"
+          >
+            <div className="absolute top-0 right-0 p-6 font-mono text-[11px] text-zinc-500 uppercase tracking-widest">
+              MOD_01 // WEBHOOK_ENGINE
+            </div>
 
-                  <h3 className="text-base sm:text-lg font-medium text-zinc-100 tracking-tight">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-zinc-400 leading-relaxed font-normal">
-                    {feature.description}
-                  </p>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/[0.05]">
-                  <pre className="font-mono text-[11px] text-zinc-500 leading-relaxed overflow-x-auto bg-black/40 p-2.5 rounded-md border border-white/[0.04]">
-                    <code>{feature.code}</code>
-                  </pre>
-                </div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-10 w-10 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00]">
+                <Webhook className="h-5 w-5" />
               </div>
-            );
-          })}
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">
+                  Idempotent Stripe Webhook Pipeline
+                </h3>
+                <p className="text-xs font-mono text-zinc-400">
+                  Signature verified • Safe period_end mapping • Next.js cache revalidation
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-zinc-400 max-w-xl leading-relaxed mb-6">
+              Eliminates the dreaded Stripe 500 crashes. Handles updated Stripe API period extraction,
+              instantaneous <code className="text-zinc-200 bg-white/5 px-1 py-0.5 font-mono">revalidatePath(&apos;/dashboard&apos;)</code>,
+              and syncs profile subscription metadata directly with Supabase Admin client.
+            </p>
+
+            {/* Simulated Live Webhook Terminal */}
+            <div className="rounded border border-white/10 bg-black/90 p-4 font-mono text-xs text-zinc-400 space-y-1.5">
+              <div className="flex items-center justify-between text-[10px] text-zinc-500 border-b border-white/[0.06] pb-2 mb-2">
+                <span>EVENT STREAM // ACTIVE</span>
+                <span className="text-[#FF5A00]">STATUS 200 OK</span>
+              </div>
+              <p className="text-zinc-300">
+                <span className="text-[#FF5A00]">&gt;</span> stripe.webhooks.constructEvent(payload, sig, secret)
+              </p>
+              <p className="text-zinc-500">
+                <span className="text-white">✓</span> [Verified] customer.subscription.updated (sub_1Op2...92)
+              </p>
+              <p className="text-zinc-500">
+                <span className="text-white">✓</span> [Profiles] subscription_status =&gt; &apos;active&apos;
+              </p>
+              <p className="text-zinc-400">
+                <span className="text-[#FF5A00]">✓</span> [Revalidate] /dashboard cleared in 8ms
+              </p>
+            </div>
+          </TiltCard>
+
+          {/* Card 2: Medium Bento Tile (Cols 4) */}
+          <TiltCard
+            intensity={12}
+            className="md:col-span-4 group border border-white/10 bg-zinc-950/70 p-8 hover:border-[#FF5A00]/50 transition-colors duration-500 flex flex-col justify-between"
+          >
+            <div>
+              <div className="font-mono text-[11px] text-zinc-500 uppercase tracking-widest mb-6">
+                MOD_02 // AUTH_SSR
+              </div>
+
+              <div className="h-10 w-10 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00] mb-6">
+                <Lock className="h-5 w-5" />
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-white uppercase mb-2">
+                Supabase SSR Token Engine
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                Modern <code className="text-zinc-200 font-mono">@supabase/ssr</code> cookie handler.
+                Protects Edge routes without hydration flashes and refreshes expired sessions automatically.
+              </p>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-white/[0.08] font-mono text-xs text-zinc-500 flex items-center justify-between">
+              <span>GOOGLE OAUTH + EMAIL</span>
+              <span className="text-white font-bold">100% READY</span>
+            </div>
+          </TiltCard>
+
+          {/* Card 3: Medium Bento Tile (Cols 4) */}
+          <TiltCard
+            intensity={12}
+            className="md:col-span-4 group border border-white/10 bg-zinc-950/70 p-8 hover:border-[#FF5A00]/50 transition-colors duration-500 flex flex-col justify-between"
+          >
+            <div>
+              <div className="font-mono text-[11px] text-zinc-500 uppercase tracking-widest mb-6">
+                MOD_03 // POSTGRES_RLS
+              </div>
+
+              <div className="h-10 w-10 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00] mb-6">
+                <Database className="h-5 w-5" />
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight text-white uppercase mb-2">
+                Hardened Database & RLS
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                Zero chance of cross-tenant leaks. Automated signup triggers generate
+                isolated profile rows linked to Postgres <code className="text-zinc-200 font-mono">auth.users</code>.
+              </p>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-white/[0.08] font-mono text-xs text-zinc-500 flex items-center justify-between">
+              <span>CASCADE DELETE TRIGGER</span>
+              <span className="text-white font-bold">ISOLATED</span>
+            </div>
+          </TiltCard>
+
+          {/* Card 4: Large Bento Tile (Cols 8) */}
+          <TiltCard
+            intensity={10}
+            className="md:col-span-8 group border border-white/10 bg-zinc-950/70 p-8 hover:border-[#FF5A00]/50 transition-colors duration-500 overflow-hidden relative"
+          >
+            <div className="absolute top-0 right-0 p-6 font-mono text-[11px] text-zinc-500 uppercase tracking-widest">
+              MOD_04 // BILLING_PORTAL
+            </div>
+
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-10 w-10 bg-black border border-white/15 flex items-center justify-center text-[#FF5A00]">
+                <Layers className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white uppercase">
+                  Self-Service Customer Portal
+                </h3>
+                <p className="text-xs font-mono text-zinc-400">
+                  Direct billing self-management without support ticket overhead
+                </p>
+              </div>
+            </div>
+
+            <p className="text-sm text-zinc-400 max-w-xl leading-relaxed mb-6">
+              Customers can instantly switch plans, download tax receipts, and update credit cards via
+              one-click encrypted Stripe Customer Portal sessions.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+              <div className="p-3 bg-black border border-white/[0.08]">
+                <div className="text-zinc-500 text-[10px]">MONTHLY / ANNUAL</div>
+                <div className="text-white font-bold mt-1">PRICE ID MAPPING</div>
+              </div>
+              <div className="p-3 bg-black border border-white/[0.08]">
+                <div className="text-zinc-500 text-[10px]">PORTAL SESSION</div>
+                <div className="text-white font-bold mt-1">SINGLE USE URL</div>
+              </div>
+              <div className="p-3 bg-black border border-white/[0.08]">
+                <div className="text-zinc-500 text-[10px]">CANCELLATION FLOW</div>
+                <div className="text-[#FF5A00] font-bold mt-1">INSTANT SYNC</div>
+              </div>
+            </div>
+          </TiltCard>
         </div>
       </div>
     </section>

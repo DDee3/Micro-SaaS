@@ -30,9 +30,9 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col selection:bg-white/10 selection:text-white">
+    <div className="min-h-screen bg-[#000000] text-white flex flex-col selection:bg-[#FF5A00] selection:text-black">
       <DashboardNav user={userData} />
-      <main className="flex-1 container max-w-5xl mx-auto px-6 pt-24 md:pt-28 pb-16">
+      <main className="flex-1 container max-w-6xl mx-auto px-6 pt-24 md:pt-28 pb-20">
         {children}
       </main>
     </div>

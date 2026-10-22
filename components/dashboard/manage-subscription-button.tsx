@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Loader2, Sparkles } from "lucide-react";
+import { ArrowUpRight, Loader2, ExternalLink } from "lucide-react";
 
 interface ManageSubscriptionButtonProps {
   hasStripeCustomer: boolean;
@@ -11,7 +11,7 @@ interface ManageSubscriptionButtonProps {
 
 export function ManageSubscriptionButton({
   hasStripeCustomer,
-  className,
+  className = "",
 }: ManageSubscriptionButtonProps) {
   const [loading, setLoading] = useState(false);
 
@@ -41,14 +41,16 @@ export function ManageSubscriptionButton({
   if (!hasStripeCustomer) {
     return (
       <Button
-        size="sm"
+        size="lg"
         onClick={() => {
           window.location.href = "/#pricing";
         }}
-        className={`rounded-full bg-white text-zinc-950 hover:bg-zinc-200 font-medium text-xs h-8 px-4 shadow-[0_0_20px_rgba(255,255,255,0.12)] transition-all duration-200 active:scale-[0.98] ${className}`}
+        className={`bg-[#FF5A00] text-black hover:bg-white hover:text-black font-mono font-black text-xs sm:text-sm uppercase tracking-wider rounded-none h-11 sm:h-12 px-7 shadow-[0_0_25px_rgba(255,90,0,0.3)] transition-all duration-300 active:scale-[0.98] ${className}`}
       >
-        <Sparkles className="mr-1.5 h-3.5 w-3.5 text-zinc-600" />
-        Upgrade Plan
+        <span className="flex items-center gap-2">
+          <span>Upgrade Tier</span>
+          <ArrowUpRight className="h-4 w-4" />
+        </span>
       </Button>
     );
   }
@@ -56,20 +58,20 @@ export function ManageSubscriptionButton({
   return (
     <Button
       variant="outline"
-      size="sm"
+      size="lg"
       onClick={handleOpenPortal}
       disabled={loading}
-      className={`rounded-full border border-white/[0.08] bg-zinc-900/60 text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-white/20 transition-all duration-200 text-xs h-8 px-4 backdrop-blur-sm active:scale-[0.98] ${className}`}
+      className={`border-2 border-white/20 bg-black text-white hover:bg-[#FF5A00] hover:text-black hover:border-[#FF5A00] font-mono font-black text-xs sm:text-sm uppercase tracking-wider rounded-none h-11 sm:h-12 px-7 backdrop-blur-md transition-all duration-300 active:scale-[0.98] ${className}`}
     >
       {loading ? (
-        <span className="flex items-center gap-1.5">
-          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          Connecting...
+        <span className="flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          CONNECTING...
         </span>
       ) : (
-        <span className="flex items-center gap-1.5">
-          <ExternalLink className="h-3.5 w-3.5 text-zinc-400" />
-          Manage Billing
+        <span className="flex items-center gap-2">
+          <span>Manage Billing</span>
+          <ExternalLink className="h-4 w-4" />
         </span>
       )}
     </Button>
