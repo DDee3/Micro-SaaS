@@ -12,8 +12,7 @@ export function OAuthButton() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const appUrl =
-        process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -26,8 +25,9 @@ export function OAuthButton() {
         alert(error.message);
         setLoading(false);
       }
-    } catch (err: any) {
-      console.error(err);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Authentication failed";
+      console.error("OAuth error:", message);
       setLoading(false);
     }
   };
@@ -66,4 +66,3 @@ export function OAuthButton() {
     </Button>
   );
 }
-

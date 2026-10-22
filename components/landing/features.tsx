@@ -5,8 +5,6 @@ import {
   Layers,
   ShieldCheck,
   Code2,
-  Terminal,
-  Cpu,
 } from "lucide-react";
 
 const features = [
@@ -80,7 +78,6 @@ export function Features() {
   return (
     <section id="features" className="py-28 md:py-36 relative border-t border-white/[0.06] bg-[#090a0c]">
       <div className="container max-w-6xl mx-auto px-6">
-        {/* Section Header */}
         <div className="max-w-2xl mb-20 text-left">
           <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
@@ -95,7 +92,6 @@ export function Features() {
           </p>
         </div>
 
-        {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
@@ -122,7 +118,6 @@ export function Features() {
                   </p>
                 </div>
 
-                {/* Micro Code Snippet */}
                 <div className="mt-6 pt-4 border-t border-white/[0.05]">
                   <pre className="font-mono text-[11px] text-zinc-500 leading-relaxed overflow-x-auto bg-black/40 p-2.5 rounded-md border border-white/[0.04]">
                     <code>{feature.code}</code>

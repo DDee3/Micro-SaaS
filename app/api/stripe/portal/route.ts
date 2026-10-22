@@ -22,7 +22,7 @@ export async function POST() {
 
     if (!profile?.stripe_customer_id) {
       return NextResponse.json(
-        { error: "No active Stripe customer found for this user." },
+        { error: "No active Stripe customer found for this account" },
         { status: 400 }
       );
     }
@@ -35,12 +35,9 @@ export async function POST() {
     });
 
     return NextResponse.json({ url: portalSession.url });
-  } catch (err: any) {
-    console.error("Stripe Portal Error:", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Internal Server Error";
+    console.error("Stripe Portal error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

@@ -46,7 +46,6 @@ export function DashboardNav({ user }: DashboardNavProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#090a0c]/85 backdrop-blur-md">
       <div className="container max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
-        {/* Brand & Workspace navigation */}
         <div className="flex items-center gap-7">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
             <div className="h-7 w-7 rounded-lg bg-zinc-900 border border-white/15 flex items-center justify-center text-zinc-200 group-hover:border-white/30 transition-all duration-200">
@@ -79,7 +78,6 @@ export function DashboardNav({ user }: DashboardNavProps) {
           </nav>
         </div>
 
-        {/* User Avatar & Dropdown Menu */}
         <div className="flex items-center gap-3">
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex text-xs text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] h-8 px-2.5 gap-1.5 font-normal">
             <Link href="/" target="_blank">

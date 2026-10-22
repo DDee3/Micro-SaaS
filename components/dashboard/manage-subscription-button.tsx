@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CreditCard, ExternalLink, Loader2, Sparkles } from "lucide-react";
+import { ExternalLink, Loader2, Sparkles } from "lucide-react";
 
 interface ManageSubscriptionButtonProps {
   hasStripeCustomer: boolean;
@@ -30,8 +30,9 @@ export function ManageSubscriptionButton({
         alert(data.error || "Unable to open billing portal.");
         setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to connect to billing portal";
+      console.error("Billing portal error:", message);
       alert("Failed to connect to billing portal. Please try again.");
       setLoading(false);
     }

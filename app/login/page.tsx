@@ -51,8 +51,9 @@ function LoginForm() {
         router.push(redirectTo);
         router.refresh();
       }
-    } catch (err: any) {
-      setErrorMsg(err.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setErrorMsg(message);
       setLoading(false);
     }
   };
@@ -75,12 +76,9 @@ function LoginForm() {
           </div>
         )}
 
-        {/* Google OAuth button */}
         <OAuthButton />
-
         <AuthFormDivider />
 
-        {/* Email/Password form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email address</Label>
@@ -186,4 +184,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

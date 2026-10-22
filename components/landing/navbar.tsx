@@ -43,7 +43,6 @@ export function Navbar() {
       }`}
     >
       <div className="container max-w-6xl mx-auto flex items-center justify-between px-6">
-        {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="h-8 w-8 rounded-lg bg-zinc-900 border border-white/15 flex items-center justify-center text-zinc-200 group-hover:border-white/30 group-hover:text-white transition-all duration-200">
             <Terminal className="h-4 w-4" />
@@ -56,7 +55,6 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-7 text-[13px] font-medium text-zinc-400">
           <Link
             href="#features"
@@ -84,7 +82,6 @@ export function Navbar() {
           </Link>
         </nav>
 
-        {/* Action CTAs */}
         <div className="flex items-center gap-3">
           {user ? (
             <Button

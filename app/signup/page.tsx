@@ -37,8 +37,7 @@ export default function SignUpPage() {
     setSuccessMsg(null);
 
     try {
-      const appUrl =
-        process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -71,8 +70,9 @@ export default function SignUpPage() {
           "Account created! Please check your email for the confirmation link to verify your account."
         );
       }
-    } catch (err: any) {
-      setErrorMsg(err.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setErrorMsg(message);
     } finally {
       setLoading(false);
     }
@@ -130,7 +130,6 @@ export default function SignUpPage() {
             )}
 
             <OAuthButton />
-
             <AuthFormDivider />
 
             <form onSubmit={handleSignUp} className="space-y-4">
@@ -204,4 +203,3 @@ export default function SignUpPage() {
     </div>
   );
 }
-

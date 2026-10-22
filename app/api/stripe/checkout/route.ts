@@ -23,7 +23,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Retrieve or create Stripe customer id
     const { data: profile } = await supabaseAdmin
       .from("profiles")
       .select("stripe_customer_id, email, full_name")
@@ -38,6 +37,7 @@ export async function POST(req: Request) {
         name: profile?.full_name || undefined,
         metadata: {
           supabaseUUID: user.id,
+          userId: user.id,
         },
       });
       customerId = customer.id;
@@ -75,12 +75,9 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ url: session.url });
-  } catch (err: any) {
-    console.error("Stripe Checkout Error:", err);
-    return NextResponse.json(
-      { error: err.message || "Internal Server Error" },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Internal Server Error";
+    console.error("Stripe Checkout error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

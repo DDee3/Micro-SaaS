@@ -8,8 +8,9 @@ import {
   Database,
   CheckCircle2,
   ShieldCheck,
-  HardDrive,
 } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 interface DashboardPageProps {
   searchParams: {
@@ -29,7 +30,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     redirect("/login");
   }
 
-  // Fetch full profile with billing details using admin client to guarantee freshness
   const { data: profile } = await supabaseAdmin
     .from("profiles")
     .select("*")
@@ -44,7 +44,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   return (
     <div className="space-y-10 pb-16">
-      {/* Checkout Success Banner */}
       {searchParams.success && (
         <div className="flex items-center gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-emerald-400">
           <CheckCircle2 className="h-4 w-4 shrink-0" />
@@ -54,7 +53,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         </div>
       )}
 
-      {/* Welcome Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-white/[0.06]">
         <div>
           <div className="font-mono text-[11px] uppercase tracking-wider text-zinc-500 mb-1">
@@ -68,7 +66,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </p>
         </div>
 
-        {/* Primary Action Button (Single Upgrade / Manage Button) */}
         <div className="flex items-center gap-3">
           <ManageSubscriptionButton
             hasStripeCustomer={!!profile?.stripe_customer_id}
@@ -76,9 +73,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         </div>
       </div>
 
-      {/* Precision Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Subscription Status Card */}
         <div className="group rounded-xl border border-white/[0.07] bg-zinc-950/40 p-5 hover:border-white/20 hover:bg-zinc-900/20 transition-all duration-200 hover:-translate-y-0.5">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
@@ -116,7 +111,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </p>
         </div>
 
-        {/* API Usage Quota Card */}
         <div className="group rounded-xl border border-white/[0.07] bg-zinc-950/40 p-5 hover:border-white/20 hover:bg-zinc-900/20 transition-all duration-200 hover:-translate-y-0.5">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
@@ -136,7 +130,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </span>
           </div>
 
-          {/* Sleek Progress Track */}
           <div className="w-full bg-zinc-900 rounded-full h-1 mt-3 border border-white/[0.03]">
             <div
               className="bg-zinc-200 h-1 rounded-full transition-all duration-500"
@@ -149,7 +142,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </p>
         </div>
 
-        {/* Database & RLS Security Card */}
         <div className="group rounded-xl border border-white/[0.07] bg-zinc-950/40 p-5 hover:border-white/20 hover:bg-zinc-900/20 transition-all duration-200 hover:-translate-y-0.5">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
@@ -176,7 +168,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         </div>
       </div>
 
-      {/* Account & Billing Technical Details Table */}
       <div className="rounded-xl border border-white/[0.07] bg-zinc-950/40 overflow-hidden">
         <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
           <div>

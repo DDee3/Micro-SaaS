@@ -48,7 +48,6 @@ export function FAQ() {
           </p>
         </div>
 
-        {/* 2-Column Clean Hairline Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {faqs.map((faq, index) => (
             <div

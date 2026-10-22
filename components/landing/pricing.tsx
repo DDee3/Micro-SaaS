@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PLANS, type Plan } from "@/lib/stripe/config";
 import { Button } from "@/components/ui/button";
-import { Check, Loader2, ArrowRight } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export function Pricing() {
@@ -40,8 +40,9 @@ export function Pricing() {
       } else {
         alert(data.error || "Failed to create checkout session");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred.";
+      console.error("Plan selection error:", message);
       alert("An unexpected error occurred. Please try again.");
     } finally {
       setLoadingPriceId(null);
@@ -51,7 +52,6 @@ export function Pricing() {
   return (
     <section id="pricing" className="py-28 md:py-36 relative border-t border-white/[0.06] bg-[#090a0c]">
       <div className="container max-w-6xl mx-auto px-6">
-        {/* Header */}
         <div className="max-w-2xl mb-14 text-left">
           <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
@@ -65,7 +65,6 @@ export function Pricing() {
             and allow users to self-manage billing via Stripe.
           </p>
 
-          {/* Segmented Control Toggle (Linear/Vercel Style) */}
           <div className="mt-8 inline-flex items-center p-1 rounded-lg border border-white/[0.08] bg-zinc-950/80 backdrop-blur-md">
             <button
               type="button"
@@ -95,7 +94,6 @@ export function Pricing() {
           </div>
         </div>
 
-        {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {PLANS.map((plan) => {
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
