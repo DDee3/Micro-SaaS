@@ -3,93 +3,132 @@ import {
   CreditCard,
   Database,
   Layers,
-  Sparkles,
-  ShieldAlert,
-  Zap,
+  ShieldCheck,
   Code2,
+  Terminal,
+  Cpu,
 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const features = [
   {
-    icon: Lock,
+    tag: "AUTH_SSR",
     title: "Supabase Authentication",
     description:
-      "Full auth suite ready to go: Email & Password, Google OAuth, Magic Links, and Password Reset flows with SSR session handling.",
+      "Fully typed authentication flow using `@supabase/ssr`. Complete with Email/Password, Google OAuth, session token refreshing, and password reset routes.",
+    icon: Lock,
+    code: `// lib/supabase/server.ts
+const supabase = await createClient();
+const { data: { user } } = await supabase.auth.getUser();`,
   },
   {
+    tag: "BILLING_ENGINE",
+    title: "Stripe Recurring Billing",
+    description:
+      "Stripe Checkout sessions with price ID mapping, customer creation, and signature-verified webhook handlers for subscriptions, cancellations, and invoices.",
     icon: CreditCard,
-    title: "Stripe Billing & Subscriptions",
-    description:
-      "Stripe Checkout, Webhook handlers for checkout and subscription lifecycle, plus the Stripe Customer Portal for managing cards and cancellations.",
+    code: `// api/stripe/webhook/route.ts
+switch (event.type) {
+  case "checkout.session.completed":
+  case "customer.subscription.updated":
+}`,
   },
   {
+    tag: "POSTGRES_RLS",
+    title: "Database & Profiles Schema",
+    description:
+      "Complete SQL schema for user profiles linked to auth.users. Includes automated database triggers, updated_at handlers, and strict Row Level Security.",
     icon: Database,
-    title: "PostgreSQL & Row Level Security",
-    description:
-      "Complete SQL schema for profiles table linked to auth.users, automated database triggers, and strict RLS policies protecting customer data.",
+    code: `create policy "Users can view own profile"
+  on public.profiles for select
+  using (auth.uid() = id);`,
   },
   {
-    icon: ShieldAlert,
-    title: "Protected Routes Middleware",
+    tag: "EDGE_GUARD",
+    title: "Protected Route Middleware",
     description:
-      "Edge-ready Next.js middleware that validates user tokens, refreshes cookies, and redirects unauthorized traffic before pages even render.",
+      "Edge middleware that validates user tokens, refreshes cookies on every request, and intercepts unauthenticated access before pages are rendered.",
+    icon: ShieldCheck,
+    code: `// middleware.ts
+if (pathname.startsWith('/dashboard') && !user) {
+  return NextResponse.redirect('/login');
+}`,
   },
   {
+    tag: "DESIGN_SYSTEM",
+    title: "Modern Shadcn UI + Tailwind",
+    description:
+      "Zero lock-in UI components built on Radix UI primitives. Pre-configured dark theme, accessible dialogs, switches, badges, and clean typography.",
     icon: Layers,
-    title: "Modern Shadcn UI & Tailwind",
-    description:
-      "Crafted with Radix UI and Tailwind CSS. Clean, accessible, customizable components styled with sleek modern dark theme support.",
+    code: `import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"`,
   },
   {
-    icon: Code2,
-    title: "100% TypeScript & Clean Architecture",
+    tag: "TYPE_SAFETY",
+    title: "100% Strict TypeScript",
     description:
-      "Strict typing throughout client and server components, modular library utilities, and idiomatic Next.js 14 App Router conventions.",
+      "End-to-end type safety from server actions and route handlers to client forms and Supabase database models. Zero compilation warnings.",
+    icon: Code2,
+    code: `export interface Plan {
+  id: string;
+  monthlyPrice: number;
+  monthlyPriceId: string;
+}`,
   },
 ];
 
 export function Features() {
   return (
-    <section id="features" className="py-24 sm:py-32 relative border-t border-border/40">
-      <div className="container max-w-6xl mx-auto px-4">
+    <section id="features" className="py-28 md:py-36 relative border-t border-white/[0.06] bg-[#090a0c]">
+      <div className="container max-w-6xl mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4">
-            <Sparkles className="h-3.5 w-3.5" />
-            Built for Solopreneurs & Founders
+        <div className="max-w-2xl mb-20 text-left">
+          <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+            Architectural Overview
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground">
-            Everything you need to launch a profitable SaaS
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.03em] text-zinc-100 leading-tight">
+            Engineered for reliability, speed, and clean code
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground">
-            Stop spending 40+ hours setting up auth, billing, database relations, and styling for every project.
+          <p className="mt-4 text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
+            No bloated third-party dependencies. Built strictly on Next.js 14 App Router,
+            official Supabase SSR utilities, and Stripe API standards.
           </p>
         </div>
 
-        {/* Features Grid */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => {
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
-              <Card
-                key={index}
-                className="bg-card/40 border-border/60 hover:border-primary/40 hover:bg-card/60 transition-all duration-300 group"
+              <div
+                key={idx}
+                className="group relative flex flex-col justify-between rounded-xl border border-white/[0.07] bg-zinc-950/40 p-6 hover:border-white/20 hover:bg-zinc-900/25 transition-all duration-300 hover:-translate-y-0.5"
               >
-                <CardHeader>
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    <Icon className="h-6 w-6" />
+                <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="h-9 w-9 rounded-lg border border-white/10 bg-zinc-900/80 flex items-center justify-center text-zinc-300 group-hover:border-white/20 group-hover:text-white transition-colors duration-200">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="font-mono text-[10px] tracking-wider text-zinc-500 uppercase px-2 py-0.5 rounded border border-white/[0.06] bg-white/[0.02]">
+                      {feature.tag}
+                    </span>
                   </div>
-                  <CardTitle className="mt-4 text-xl font-semibold">
+
+                  <h3 className="text-lg font-medium text-zinc-100 tracking-tight">
                     {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm text-muted-foreground leading-relaxed">
+                  </h3>
+                  <p className="mt-2 text-sm text-zinc-400 leading-relaxed font-normal">
                     {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+                  </p>
+                </div>
+
+                {/* Micro Code Snippet */}
+                <div className="mt-6 pt-4 border-t border-white/[0.05]">
+                  <pre className="font-mono text-[11px] text-zinc-500 leading-relaxed overflow-x-auto bg-black/40 p-2.5 rounded-md border border-white/[0.04]">
+                    <code>{feature.code}</code>
+                  </pre>
+                </div>
+              </div>
             );
           })}
         </div>
@@ -97,4 +136,3 @@ export function Features() {
     </section>
   );
 }
-

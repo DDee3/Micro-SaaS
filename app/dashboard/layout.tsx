@@ -30,12 +30,11 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-[#090a0c] text-zinc-100 flex flex-col selection:bg-white/10 selection:text-white">
       <DashboardNav user={userData} />
-      <main className="flex-1 container max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <main className="flex-1 container max-w-6xl mx-auto px-6 py-10">
         {children}
       </main>
     </div>
   );
 }
-

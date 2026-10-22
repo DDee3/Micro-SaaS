@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Sparkles, LayoutDashboard, CreditCard, LogOut, ExternalLink } from "lucide-react";
+import { Terminal, LayoutDashboard, CreditCard, LogOut, ExternalLink } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,89 +44,97 @@ export function DashboardNav({ user }: DashboardNavProps) {
     "U";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/80 backdrop-blur-md">
-      <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
-        {/* Brand Logo & Links */}
-        <div className="flex items-center gap-8">
+    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#090a0c]/85 backdrop-blur-md">
+      <div className="container max-w-6xl mx-auto flex h-14 items-center justify-between px-6">
+        {/* Brand & Workspace navigation */}
+        <div className="flex items-center gap-7">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <Sparkles className="h-4 w-4 text-white" />
+            <div className="h-7 w-7 rounded-lg bg-zinc-900 border border-white/15 flex items-center justify-center text-zinc-200 group-hover:border-white/30 transition-all duration-200">
+              <Terminal className="h-3.5 w-3.5" />
             </div>
-            <span className="font-bold text-lg tracking-tight">
-              LaunchSaaS<span className="text-primary">.kit</span>
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-sm text-zinc-100 tracking-tight">
+                LaunchKit
+              </span>
+              <span className="text-zinc-600 text-xs">/</span>
+              <span className="font-mono text-[11px] text-zinc-400">
+                Console
+              </span>
+            </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+          <nav className="hidden md:flex items-center gap-5 text-xs font-medium text-zinc-400">
             <Link
               href="/dashboard"
-              className="text-foreground transition-colors hover:text-foreground"
+              className="text-zinc-100 transition-colors"
             >
               Overview
             </Link>
             <Link
               href="/#pricing"
-              className="hover:text-foreground transition-colors"
+              className="hover:text-zinc-100 transition-colors"
             >
-              Plans & Pricing
+              Plans
             </Link>
           </nav>
         </div>
 
         {/* User Avatar & Dropdown Menu */}
-        <div className="flex items-center gap-4">
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex text-xs text-muted-foreground gap-1">
+        <div className="flex items-center gap-3">
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex text-xs text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] h-8 px-2.5 gap-1.5 font-normal">
             <Link href="/" target="_blank">
-              View Landing Page
-              <ExternalLink className="h-3 w-3" />
+              <span>Landing Page</span>
+              <ExternalLink className="h-3 w-3 text-zinc-500" />
             </Link>
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all">
-                <Avatar className="h-10 w-10">
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full border border-white/10 hover:border-white/20 transition-all p-0">
+                <Avatar className="h-8 w-8">
                   <AvatarImage src={user.avatarUrl} alt={user.fullName || "User"} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                  <AvatarFallback className="bg-zinc-900 text-zinc-200 font-mono text-xs">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
+            <DropdownMenuContent className="w-56 bg-zinc-950 border border-white/10 text-zinc-300 shadow-2xl" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal p-3">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-xs font-medium text-zinc-100">
                     {user.fullName || "Account"}
                   </p>
-                  <p className="text-xs leading-none text-muted-foreground truncate">
+                  <p className="text-[11px] font-mono text-zinc-500 truncate">
                     {user.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="flex items-center cursor-pointer">
-                    <LayoutDashboard className="mr-2 h-4 w-4 text-muted-foreground" />
+              <DropdownMenuSeparator className="bg-white/[0.06]" />
+              <DropdownMenuGroup className="p-1">
+                <DropdownMenuItem asChild className="text-xs focus:bg-zinc-900 focus:text-zinc-100 rounded-md">
+                  <Link href="/dashboard" className="flex items-center cursor-pointer py-1.5">
+                    <LayoutDashboard className="mr-2 h-3.5 w-3.5 text-zinc-400" />
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/#pricing" className="flex items-center cursor-pointer">
-                    <CreditCard className="mr-2 h-4 w-4 text-muted-foreground" />
-                    <span>Upgrade Plan</span>
+                <DropdownMenuItem asChild className="text-xs focus:bg-zinc-900 focus:text-zinc-100 rounded-md">
+                  <Link href="/#pricing" className="flex items-center cursor-pointer py-1.5">
+                    <CreditCard className="mr-2 h-3.5 w-3.5 text-zinc-400" />
+                    <span>Subscription Plans</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleSignOut}
-                className="text-red-400 focus:text-red-400 cursor-pointer"
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-white/[0.06]" />
+              <div className="p-1">
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="text-xs text-red-400 focus:text-red-300 focus:bg-red-500/10 rounded-md cursor-pointer py-1.5"
+                >
+                  <LogOut className="mr-2 h-3.5 w-3.5" />
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
