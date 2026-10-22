@@ -50,14 +50,14 @@ export function Pricing() {
   };
 
   return (
-    <section id="pricing" className="py-28 md:py-36 relative border-t border-white/[0.06] bg-[#090a0c]">
+    <section id="pricing" className="py-28 md:py-36 relative border-t border-white/[0.08] bg-[#09090b]">
       <div className="container max-w-6xl mx-auto px-6">
-        <div className="max-w-2xl mb-14 text-left">
+        <div className="max-w-2xl mb-16 text-left">
           <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
-            Pricing Tiers
+            Predictable Billing
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.03em] text-zinc-100 leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.035em] text-zinc-100 leading-tight">
             Transparent pricing for builders
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
@@ -65,11 +65,11 @@ export function Pricing() {
             and allow users to self-manage billing via Stripe.
           </p>
 
-          <div className="mt-8 inline-flex items-center p-1 rounded-lg border border-white/[0.08] bg-zinc-950/80 backdrop-blur-md">
+          <div className="mt-8 inline-flex items-center p-1 rounded-full border border-white/[0.08] bg-zinc-950/80 backdrop-blur-md">
             <button
               type="button"
               onClick={() => setIsYearly(false)}
-              className={`px-4 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+              className={`px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
                 !isYearly
                   ? "bg-zinc-800 text-white shadow-sm"
                   : "text-zinc-400 hover:text-zinc-200"
@@ -80,15 +80,15 @@ export function Pricing() {
             <button
               type="button"
               onClick={() => setIsYearly(true)}
-              className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+              className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
                 isYearly
                   ? "bg-zinc-800 text-white shadow-sm"
                   : "text-zinc-400 hover:text-zinc-200"
               }`}
             >
               <span>Annual Billing</span>
-              <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded">
-                -20%
+              <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded-full">
+                Save 20%
               </span>
             </button>
           </div>
@@ -103,16 +103,16 @@ export function Pricing() {
             return (
               <div
                 key={plan.id}
-                className={`relative flex flex-col justify-between rounded-xl p-8 backdrop-blur-sm transition-all duration-300 ${
+                className={`relative flex flex-col justify-between rounded-xl p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 ${
                   plan.popular
-                    ? "border border-white/20 bg-zinc-900/40 shadow-[0_15px_40px_rgba(0,0,0,0.6)] md:-translate-y-1.5"
-                    : "border border-white/[0.07] bg-zinc-950/40 hover:border-white/15 hover:bg-zinc-900/20"
+                    ? "border border-white/20 bg-zinc-900/40 shadow-[0_16px_40px_rgba(0,0,0,0.6)] md:-translate-y-1.5 hover:border-white/30"
+                    : "border border-white/[0.08] bg-zinc-950/40 hover:border-white/20 hover:bg-zinc-900/30"
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 right-6">
                     <span className="font-mono text-[10px] uppercase tracking-wider font-semibold px-2.5 py-0.5 rounded-full bg-white text-zinc-950 shadow-md">
-                      Popular Choice
+                      Most Popular
                     </span>
                   </div>
                 )}
@@ -129,15 +129,15 @@ export function Pricing() {
                   </p>
 
                   <div className="mt-6 flex items-baseline gap-1.5">
-                    <span className="text-4xl sm:text-5xl font-semibold text-zinc-100 tracking-[-0.03em]">
+                    <span className="text-4xl sm:text-5xl font-semibold text-zinc-100 tracking-[-0.035em]">
                       ${price}
                     </span>
                     <span className="font-mono text-xs text-zinc-500">
-                      {isYearly ? "/yr" : "/mo"}
+                      {isYearly ? "/year" : "/month"}
                     </span>
                   </div>
 
-                  <ul className="mt-8 space-y-3 border-t border-white/[0.06] pt-6">
+                  <ul className="mt-8 space-y-3 border-t border-white/[0.08] pt-6">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-zinc-300">
                         <Check className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -151,16 +151,16 @@ export function Pricing() {
                   <Button
                     onClick={() => handleSelectPlan(plan)}
                     disabled={isLoading}
-                    className={`w-full h-10 text-xs font-medium transition-all duration-200 active:scale-[0.98] ${
+                    className={`w-full h-10 text-xs font-medium rounded-full transition-all duration-200 active:scale-[0.98] ${
                       plan.popular
                         ? "bg-white text-zinc-950 hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-                        : "border border-white/10 bg-zinc-900/50 text-zinc-200 hover:bg-zinc-800 hover:border-white/20"
+                        : "border border-white/[0.08] bg-zinc-900/50 text-zinc-200 hover:bg-zinc-800 hover:border-white/20"
                     }`}
                   >
                     {isLoading ? (
                       <span className="flex items-center gap-2">
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        Connecting to Stripe...
+                        Redirecting to Stripe...
                       </span>
                     ) : (
                       plan.cta

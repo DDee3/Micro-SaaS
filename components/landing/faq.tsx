@@ -33,31 +33,31 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="py-28 md:py-36 relative border-t border-white/[0.06] bg-[#090a0c]">
+    <section id="faq" className="py-28 md:py-36 relative border-t border-white/[0.08] bg-[#09090b]">
       <div className="container max-w-5xl mx-auto px-6">
         <div className="max-w-2xl mb-16 text-left">
           <div className="font-mono text-xs uppercase tracking-widest text-zinc-500 mb-3 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
-            Frequently Asked Questions
+            Common Inquiries
           </div>
-          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.03em] text-zinc-100 leading-tight">
-            Common questions & architecture details
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-[-0.035em] text-zinc-100 leading-tight">
+            Frequently asked questions
           </h2>
           <p className="mt-4 text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
-            Everything you need to know about the starter kit stack, licenses, and deployment.
+            Everything you need to know about the starter kit stack, architecture, and deployment.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="p-6 rounded-xl border border-white/[0.07] bg-zinc-950/40 hover:border-white/15 transition-all duration-200"
+              className="group p-6 rounded-xl border border-white/[0.08] bg-zinc-950/40 hover:border-white/20 hover:bg-zinc-900/30 transition-all duration-200"
             >
-              <h3 className="text-base font-medium text-zinc-100 tracking-tight">
+              <h3 className="text-base font-medium text-zinc-100 tracking-tight group-hover:text-white transition-colors">
                 {faq.question}
               </h3>
-              <p className="mt-2.5 text-xs sm:text-sm text-zinc-400 leading-relaxed font-normal">
+              <p className="mt-3 text-xs sm:text-sm text-zinc-400 leading-relaxed font-normal">
                 {faq.answer}
               </p>
             </div>
